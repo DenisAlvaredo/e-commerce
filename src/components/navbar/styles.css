@@ -1,0 +1,23 @@
+nav ul{
+    margin: 0;
+    padding: 5px;
+    list-style: none;
+    display: flex;
+    background-color: black;
+}
+
+nav ul li{
+    text-align: center;
+    padding: 10px;
+    color: white;
+    font-size: 17px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+.pull-right{
+    margin-left: auto;
+}
