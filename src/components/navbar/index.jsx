@@ -1,3 +1,5 @@
+import React from "react";
+import { Link } from "react-router-dom";
 import './styles.css'
 
 function NavBar() {
@@ -7,8 +9,8 @@ function NavBar() {
                 <ul>
                     <li>Logo.png</li>
                     <li className='pull-right'>Cart</li>
-                    <li> <a href="/">Categories </a> </li>
-                    <li> <a href="/products"> Products </a> </li>
+                    <li> <Link to={"/"}>Categories </Link> </li>
+                    <li> <Link to={"/products"}> Products </Link> </li>
                     <li>Register</li>
                 </ul>
             </div>
