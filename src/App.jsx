@@ -7,8 +7,8 @@ function App() {
 
   return (
     <>
-    <NavBar />
       <BrowserRouter>
+        <NavBar />
         <Routes>
           <Route path="/" element={<IndexCategories />} />
           <Route path="/products" element={<IndexProducts />} />
