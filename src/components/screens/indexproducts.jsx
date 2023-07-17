@@ -1,38 +1,35 @@
-import { useEffect, useState } from "react";
+import { useQuery } from 'react-query';
 import Products from "../products";
-import "./styles.css";
-
+import Loading from "./Loading";
+import Error from "./Error";
+import "./styles.css"
 
 function IndexProducts() {
-    const [prod, setProd] = useState([])
-
     const productsUrl = "https://api.escuelajs.co/api/v1/products"
     
-    const fetchProducts = (url) => {
-        fetch(url)
-            .then((response)=> {
-            if(!response.ok) {
-                throw new Error("ERROR HTTP: " + response.status)
-            }
-            return response.json();
-            })
-            .then((data) => {
-                setProd(data);
-            })
-            .catch((error) => console.log(error))
+    const fetchProducts = async (url) => {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("ERROR HTTP: " + response.status);
+        }
+        return response.json();
     }
 
-    useEffect(() => {
-        fetchProducts(productsUrl);
-    }, []);
+    const { data: products, isLoading, isError } = useQuery('products', () =>
+        fetchProducts(productsUrl)
+    );
 
-    if (prod.length === 0) {
-        return <h1 className="loading" >Loading...</h1>
+    if (isLoading) {
+        return <Loading />;
+    }
+
+    if (isError) {
+        return <Error />;
     }
 
     return(
         <div className="container">
-            <Products products={prod} />
+            <Products products={products} />
         </div>
     )
 }

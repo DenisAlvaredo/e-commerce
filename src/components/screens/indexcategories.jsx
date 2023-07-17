@@ -1,40 +1,37 @@
-import { useEffect, useState } from "react";
+import { useQuery } from 'react-query';
 import Categories from "../categories";
+import Loading from "./Loading";
+import Error from "./Error";
 import "./styles.css"
 
 function IndexCategories() {
-    const [categories, setCategories] = useState([]);
-
     const categoriesUrl = "https://api.escuelajs.co/api/v1/categories";
 
-    const fetchCategories = (url) => {
-        fetch(url)
-            .then((response)=> {
-            if (!response.ok) {
-                throw new Error("ERROR HTTP: " + response.status)
-            }
-            return response.json();
-            })
-            .then((data) => {
-                setCategories(data);
-            })
-            .catch((error) => console.log(error))
+    const fetchCategories = async (url) => {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("ERROR HTTP: " + response.status);
+        }
+        return response.json();
     }
 
-    useEffect(() => {
-        fetchCategories(categoriesUrl);
-    }, []);
-
-    if (categories.length === 0) {
-        return <h1 className="loading" >Loading...</h1>;
-    }
+    const { data: categories, isLoading, isError } = useQuery('categories', () =>
+        fetchCategories(categoriesUrl)
+    );
     
+    if (isLoading) {
+        return <Loading />;
+    }
+
+    if (isError) {
+        return <Error />;
+    }
 
     return (
         <div className="container">
             <Categories categories={categories} />
         </div>
-    )
+    );
 }
 
 export default IndexCategories;
