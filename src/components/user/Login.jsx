@@ -40,10 +40,8 @@ function Login() {
         const storedAccessToken = localStorage.getItem('accessToken');
         const storedRefreshToken = localStorage.getItem('refreshToken');
     
-        if (storedAccessToken && storedRefreshToken) {
-            login({ access_token: storedAccessToken, refresh_token: storedRefreshToken });
-        }
-    }, []);
+        login({ access_token: storedAccessToken, refresh_token: storedRefreshToken });
+        }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('accessToken');

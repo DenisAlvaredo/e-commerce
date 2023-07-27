@@ -1,56 +1,73 @@
-import React, { useState, useEffect } from 'react';
-import './styles.css'
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { handleFilter } from './filter/utils';
+import { useContext } from 'react';
+import { AuthContext } from '../user/AuthContext';
+import TitleFilter from './filter/TitleFilter';
+import CategoriesFilter from './filter/CategoryFilter';
+import RangePriceFilter from './filter/RangePriceFilter';
+import DeleteProduct from './Delete'
+import './styles.css';
 
-const Products = ({ products = [] }) => {
+const Products = ({ products = [], categories = [] }) => {
+    const { isAdmin } =  useContext(AuthContext);
+
     const [filteredProducts, setFilteredProducts] = useState(products);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [categoryFilter, setCategoryFilter] = useState('');
-    const [minPriceFilter, setMinPriceFilter] = useState('');
-    const [maxPriceFilter, setMaxPriceFilter] = useState('');
+    const [titleFilter, setTitleFilter] = useState('');
+    const [priceMinFilter, setPriceMinFilter] = useState('');
+    const [priceMaxFilter, setPriceMaxFilter] = useState('');
+    const [selectedCategories, setSelectedCategories] = useState([]);
 
-    useEffect(() => {
-    // Aplicar los filtros en función de los valores actuales
-        const filtered = products.filter((product) => {
-            // Filtro por título
-            if (searchTerm && !product.title.toLowerCase().includes(searchTerm.toLowerCase())) {
-                return false;
-            }
-            // Filtro por categoría
-            if (categoryFilter && product.category.name !== categoryFilter) {
-                return false;
-            }
-            // Filtro por rango de precios
-            if (minPriceFilter && parseFloat(product.price) < parseFloat(minPriceFilter)) {
-                return false;
-            }
-            if (maxPriceFilter && parseFloat(product.price) > parseFloat(maxPriceFilter)) {
-                return false;
-            }
-            return true;
-        });
+    const applyFilters = () => {
+        let params = '';
 
-            setFilteredProducts(filtered);
-        }, [products, searchTerm, categoryFilter, priceFilter, minPriceFilter, maxPriceFilter]);
+        if (titleFilter) {
+        params += `title=${titleFilter}&`;
+        }
 
-        const handleSearch = (event) => {
-            setSearchTerm(event.target.value);
-        };
+        if (priceMinFilter && priceMaxFilter) {
+        params += `price_min=${priceMinFilter}&price_max=${priceMaxFilter}&`;
+        }
 
-        const handleCategoryFilter = (event) => {
-            setCategoryFilter(event.target.value);
-        };
+        if (selectedCategories.length > 0) {
+        const categoryIds = selectedCategories.map((category) => category.id).join(',');
+        params += `categories=${categoryIds}&`;
+        }
 
-        const handleMinPriceFilter = (event) => {
-            setMinPriceFilter(event.target.value);
-        };
+        params = params ? params.slice(0, -1) : '';
 
-        const handleMaxPriceFilter = (event) => {
-            setMaxPriceFilter(event.target.value);
-        };
+        handleFilter('https://api.escuelajs.co/api/v1/products', params, setFilteredProducts);
+    };
+
+    const handleTitleFilter = (title) => {
+        setTitleFilter(title);
+        applyFilters();
+    };
+
+    const handlePriceRangeFilter = (min, max) => {
+        setPriceMinFilter(min);
+        setPriceMaxFilter(max);
+        applyFilters();
+    };
+
+    const handleCategoryFilter = (selectedCategories) => {
+        setSelectedCategories(selectedCategories);
+        applyFilters();
+    };
+
 
     return(
         <div className='prod'>
             <h1>Products</h1>
+
+            <TitleFilter onFilter={handleTitleFilter} />
+            <RangePriceFilter onFilter={handlePriceRangeFilter} />
+            <CategoriesFilter categories={categories} onFilter={handleCategoryFilter} />
+
+            {isAdmin && (
+                <Link to={'/products/create'}>Create product</Link>
+            )}
+
             <div className='cards'>
                 {products.map((prod) =>
                     <div key={prod.id} className='card' >
@@ -60,6 +77,12 @@ const Products = ({ products = [] }) => {
                         <p>Desc:</p>
                         <p>{prod.description}</p>
                         <p>Category: {prod.category.name}</p>
+                        {isAdmin && (
+                            <>
+                                <button><Link to={`/products/${prod.id}/edit`}>Edit</Link></button>
+                                <DeleteProduct id={prod.id}/>
+                            </>
+                        )}
                     </div>
                 )}
             </div>
