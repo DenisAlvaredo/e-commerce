@@ -1,32 +1,23 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 
-const CategoriesFilter = ({ categories = [], onFilter }) => {
-    const [selectedCategories, setSelectedCategories] = useState([]);
+const CategoryFilter = ({ categories, onFilter }) => {
+    const [selectedCategory, setSelectedCategory] = useState('');
 
-    const handleCategoryChange = (category) => {
-        const updatedCategories = selectedCategories.includes(category)
-            ? selectedCategories.filter((cat) => cat !== category)
-            : [...selectedCategories, category];
-        setSelectedCategories(updatedCategories);
-        onFilter(updatedCategories);
+    const handleCategoryChange = (event) => {
+        const newSelectedCategory = event.target.value;
+        setSelectedCategory(newSelectedCategory);
+        onFilter(newSelectedCategory);
     };
 
     return (
-        <div>
-            <h2>Filter by Categories</h2>
-            {categories.map((category) => (
-                <label key={category.id}>
-                    <input
-                        type='checkbox'
-                        value={category.id}
-                        checked={selectedCategories.includes(category.id)}
-                        onChange={() => handleCategoryChange(category.id)}
-                    />
-                {category.name}
-                </label>
+        <select value={selectedCategory} onChange={handleCategoryChange}>
+            <option value=''>All Categories</option>
+                {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                    {category.name}
+                </option>
             ))}
-        </div>
+        </select>
     );
 };
-
-export default CategoriesFilter;
+export default CategoryFilter;

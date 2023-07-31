@@ -12,7 +12,7 @@ const Categories = ({ categories = [] }) => {
         <div className='cat'>
             <h1>Categories</h1>
             {isAdmin && (
-                <Link to={'categories/create'}>Create category</Link>
+                <Link to={'admin/categories/create'}>Create category</Link>
             )}
                 <div className='cards'>
                     {categories.map((category) => (
@@ -21,7 +21,7 @@ const Categories = ({ categories = [] }) => {
                             <h3 className='card-h3' >{category.name}</h3>
                             {isAdmin && (
                                 <>
-                                    <button><Link to={`/categories/${category.id}/edit`} >Edit</Link></button>
+                                    <button><Link to={`admin/categories/${category.id}/edit`} >Edit</Link></button>
                                     <DeleteCategory id={category.id}/>
                                 </>
                             )}

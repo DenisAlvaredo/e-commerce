@@ -11,7 +11,7 @@ function NavBar() {
             <div>
                 <ul>
                     <li>Logo.png</li>
-                    <li className='pull-right'>Cart</li>
+                    <li className='pull-right'> <Link to={"/cart-detail"}> Cart </Link></li>
                     <li > <Link to={"/"} className='link'>Categories </Link></li>
                     <li> <Link to={"/products"} className='link'> Products </Link></li>
                     {accessToken ? ( <li> <Link to={"/"} className='link'> Profile </Link> </li> 

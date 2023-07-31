@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
     const login = (tokens) => {
         setAccessToken(tokens.access_token);
         setRefreshToken(tokens.refresh_token);
-        setIsAdmin(isAdminValue);
+        setIsAdmin(true);
     };
 
     const logout = () => {

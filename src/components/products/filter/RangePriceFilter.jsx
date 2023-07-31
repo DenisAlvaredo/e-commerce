@@ -7,7 +7,7 @@ const PriceFilter = ({ onFilter }) => {
   const handleMinPriceChange = (event) => {
     const newMinPrice = event.target.value;
     setMinPrice(newMinPrice);
-    onFilter(newMinPrice, maxPrice); // Llama a la función de filtro de rango en el componente padre (Products)
+    onFilter(newMinPrice, maxPrice);
   };
 
   const handleMaxPriceChange = (event) => {

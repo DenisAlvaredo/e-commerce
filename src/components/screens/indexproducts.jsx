@@ -5,9 +5,18 @@ import Error from "./Error";
 import "./styles.css"
 
 function IndexProducts() {
-    const productsUrl = "https://api.escuelajs.co/api/v1/products"
+    const productsUrl = "https://api.escuelajs.co/api/v1/products";
+    const categoriesUrl = "https://api.escuelajs.co/api/v1/categories";
+
     
     const fetchProducts = async (url) => {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("ERROR HTTP: " + response.status);
+        }
+        return response.json();
+    }
+    const fetchCategories = async (url) => {
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error("ERROR HTTP: " + response.status);
@@ -19,6 +28,11 @@ function IndexProducts() {
         fetchProducts(productsUrl)
     );
 
+    const { data: categories, isLoading: isLoadingCategories, isError: isErrorCategories } = useQuery('categories', () =>
+        fetchCategories(categoriesUrl)
+        );
+    
+
     if (isLoading) {
         return <Loading />;
     }
@@ -29,7 +43,7 @@ function IndexProducts() {
 
     return(
         <div className="container">
-            <Products products={products} />
+            <Products products={products} categories={categories} />
         </div>
     )
 }
