@@ -1,0 +1,15 @@
+form{
+    display: flex;
+    flex-direction: column;
+}
+.formcard{
+    outline: dashed 1px black;
+    display: flex;
+    align-items: center;
+    margin: 5% 20%;
+    flex-direction: column;
+}
+
+.regbutton{
+    margin-bottom: 0.83em;
+}

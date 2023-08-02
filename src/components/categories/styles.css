@@ -1,0 +1,26 @@
+.cat{
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.cards{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card{
+    border: solid 1px;
+    margin: 8px;
+}
+
+.card-img{
+    width: 200px;
+    height: 200px;
+}
+
+.card-h3{
+    text-align: center;
+    margin: 10px
+}
