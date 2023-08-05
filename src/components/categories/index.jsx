@@ -10,22 +10,22 @@ const Categories = ({ categories = [] }) => {
 
     return(
         <div className='cat'>
-            <h1>Categories</h1>
+            <h1 className='cat-title'>Categories</h1>
             {isAdmin && (
-                <Link to={'admin/categories/create'}>Create category</Link>
+                <Link to={'/admin/categories/create'}>Create category</Link>
             )}
-                <div className='cards'>
+                <div className='cat-cards'>
                     {categories.map((category) => (
-                        <div key={category.id} className='card'>
-                            <img src={category.image} alt="" className='card-img'/>
-                            <h3 className='card-h3' >{category.name}</h3>
+                        <Link key={category.id} className='cat-card' to={`/products?category=${category.id}`}>
+                            <img src={category.image} alt="" className='cat-card-img'/>
+                            <h3 className='cat-card-h3' >{category.name}</h3>
                             {isAdmin && (
                                 <>
-                                    <button><Link to={`admin/categories/${category.id}/edit`} >Edit</Link></button>
+                                    <button><Link to={`/admin/categories/${category.id}/edit`} >Edit</Link></button>
                                     <DeleteCategory id={category.id}/>
                                 </>
                             )}
-                        </div>
+                        </Link>
                     ))}
                 </div>
         </div>

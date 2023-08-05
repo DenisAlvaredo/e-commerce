@@ -1,62 +1,69 @@
 import { Link } from "react-router-dom";
 import { useState, useEffect, useContext } from 'react';
 import { AuthContext } from './AuthContext';
+import { useMutation, useQueryClient } from 'react-query';
 import "./styles.css"
 
 function Login() {
-
     const { accessToken, refreshToken, login, logout } = useContext(AuthContext);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    
+
+    const queryClient = useQueryClient();
+
+    const loginMutation = useMutation(
+        (credentials) => {
+            return fetch('https://api.escuelajs.co/api/v1/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(credentials),
+            }).then(response => response.json());
+        },
+        {
+            onSuccess: (data) => {
+                const { access_token, refresh_token } = data;
+                localStorage.setItem('accessToken', access_token);
+                localStorage.setItem('refreshToken', refresh_token);
+                login({ access_token, refresh_token });
+
+                queryClient.invalidateQueries('user');
+            },
+        }
+    );
+
     const handleLogin = async (event) => {
         event.preventDefault();
 
-        const response = await fetch('https://api.escuelajs.co/api/v1/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            }),
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const { access_token, refresh_token } = data;
-            localStorage.setItem('accessToken', access_token);
-            localStorage.setItem('refreshToken', refresh_token);
-            login({ access_token, refresh_token });
-        } else {
-            console.log('Error de inicio de sesión');
+        try {
+            await loginMutation.mutateAsync({ email, password });
+        } catch (error) {
+            console.log('Error de inicio de sesión', error);
         }
-
     };
-
 
     useEffect(() => {
         const storedAccessToken = localStorage.getItem('accessToken');
         const storedRefreshToken = localStorage.getItem('refreshToken');
-    
+
         login({ access_token: storedAccessToken, refresh_token: storedRefreshToken });
-        }, []);
+    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-    
+
         logout();
     };
 
     return (
-        <div>
+        <div className="user">
             {!accessToken ? (
-                <div className="formcard" >
+                <div className="user-div" >
                     <h2>Log in</h2>
-                    <form onSubmit={handleLogin}>
-                        <label>
+                    <form onSubmit={handleLogin} className="user-form">
+                        <label className="user-label">
                             Email:
                             <input
                                 type="email"
@@ -66,8 +73,8 @@ function Login() {
                                 required
                             />
                         </label>
-                        <label>
-                            Contraseña:
+                        <label className="user-label">
+                            Password:
                             <input
                                 type="password"
                                 name="password"
@@ -76,9 +83,11 @@ function Login() {
                                 required
                             />
                         </label>
-                        <button type="submit">Iniciar sesión</button>
+                        <button className="user-button" type="submit" disabled={loginMutation.isLoading}>
+                            {loginMutation.isLoading ? 'Logging in...' : 'Log in'}
+                        </button>
                     </form>
-                    <p><Link to={"/register"}>Register</Link></p>
+                    <p>Don't have and account? <Link to={"/register"}>Register</Link></p>
                 </div>
             ) : (
                 <>

@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from './CartContext';
+import './styles.css';
 
 const Cart = () => {
     const { cartItems, removeFromCart, clearCart, incrementQuantity, decrementQuantity } = useContext(CartContext);
@@ -16,7 +17,6 @@ const Cart = () => {
     };
 
     const handlePurchase = () => {
-        // Lógica para finalizar la compra (puedes realizar acciones adicionales aquí)
         clearCart();
         setPurchaseCompleted(true);
 
@@ -24,39 +24,41 @@ const Cart = () => {
             setPurchaseCompleted(false);
             const confirmed = window.confirm('¿Desea volver a la página principal?');
             if (confirmed) {
-            // Redirigir a la página de éxito
                 navigate('/');
             }
         }, 1000);
-        // Redirigir a la página de éxito
     };
 
     return (
-        <div>
-            <h2>Shopping Cart</h2>
+        <>
+            <h2 className='cart-title'>Shopping Cart</h2>
             {purchaseCompleted && <p>¡Compra realizada con éxito!</p>}
             {cartItems.length === 0 ? (
                 <p>Your cart is empty</p>
             ) : (
-                <div>
-                    <ul>
+                <div className='cart-items'>
+                    <div className='cart-cards'>
                         {cartItems.map((item) => (
-                            <li key={item.id}>
-                            <p>Title: {item.title}</p>
-                            <p>Price: ${item.price}</p>
-                            <button onClick={() => incrementQuantity(item.id)}>+</button>
-                            <p>Quantity: {item.quantity}</p>
-                            <button onClick={() => decrementQuantity(item.id)}>-</button>
-                            <p>Subtotal: ${calculateSubtotal(item)}</p>
-                            <button onClick={() => removeFromCart(item.id)}>Remove</button>
-                            </li>
+                            <div key={item.id} className='cart-product'>
+                                <h4 className='cart-product-item'>{item.title}</h4>
+                                <p className='cart-product-item'>Price: ${item.price}</p>
+                                <p className='cart-product-item'>Subtotal: ${calculateSubtotal(item)}</p>
+                                <div className='cart-quantity'>
+                                    <button onClick={() => incrementQuantity(item.id)}>+</button>
+                                    <p className='cart-quantity-p'>Quantity: {item.quantity}</p>
+                                    <button onClick={() => decrementQuantity(item.id)}>-</button>
+                                </div>
+                                    <button className='cart-product-button' onClick={() => removeFromCart(item.id)}>Remove</button>
+                            </div>
                         ))}
-                    </ul>
-                    <p>Total: ${calculateTotal()}</p>
-                    <button onClick={handlePurchase}>Finalizar compra</button>
+                    </div>
+                    <div className='cart-buy'>
+                        <h3>Total: ${calculateTotal()}</h3>
+                        <button onClick={handlePurchase}>Finalizar compra</button>
+                    </div>
                 </div>
             )}
-        </div>
+        </>
     );
 };
 

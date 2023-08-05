@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
+import Loading from '../screens/Loading';
+import Error from '../screens/Error';
 
 const CreateProduct = () => {
     const [productData, setProductData] = useState({
@@ -77,11 +79,11 @@ const CreateProduct = () => {
     };
 
     if (isLoading) {
-        return <div>Loading categories...</div>;
+        return <Loading />;
     }
 
     if (isError) {
-        return <div>Error al cargar las categorías</div>;
+        return <Error />;
     }
 
     return (

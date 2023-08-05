@@ -12,7 +12,7 @@ const CategoryFilter = ({ categories, onFilter }) => {
     return (
         <select value={selectedCategory} onChange={handleCategoryChange}>
             <option value=''>All Categories</option>
-                {categories.map((category) => (
+            {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                     {category.name}
                 </option>
@@ -20,4 +20,5 @@ const CategoryFilter = ({ categories, onFilter }) => {
         </select>
     );
 };
+
 export default CategoryFilter;

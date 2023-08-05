@@ -1,21 +1,58 @@
 .prod{
-    align-items: center;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
-.cards{
+.prod-title{
+    margin-right: 69%;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+.prod-items{
+    display: flex;
+    flex-direction: row;
+}
+
+.prod-cards{
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-end;
+    margin-left: 0%;
 }
 
-.card{
+.prod-filters{
+    margin: 2%;
+    margin-left: 0px;
+}
+
+.prod-card{
+    padding: 1%;
     border: solid 1px;
-    margin: 8px;
+    margin: 10px 15px;
+    width: 200px;
 }
 
-.card-img{
+.prod-card-img{
     width: 200px;
     height: 200px;
+}
+
+.prod-card-title{
+    margin: 1% 0%;
+    text-decoration: none;
+}
+
+.prod-card-info{
+    margin: 7% 0%;
+}
+
+.prod-buttons{
+    margin-left: 25%;
+}
+
+.prod-link{
+    text-decoration: none;
+    color: black;
 }
