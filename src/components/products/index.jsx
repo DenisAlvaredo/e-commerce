@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { handleFilter } from './filter/utils';
 import { useContext } from 'react';
 import { AuthContext } from '../user/AuthContext';
@@ -12,7 +12,10 @@ import './styles.css';
 
 const Products = ({ products = [], categories = [] }) => {
     const { isAdmin } =  useContext(AuthContext);
-    const { addToCart } = useContext(CartContext)
+    const { addToCart } = useContext(CartContext);
+    const location = useLocation();
+    const searchParams = new URLSearchParams(location.search);
+    const selectCategory = searchParams.get('category');
 
     const [filteredProducts, setFilteredProducts] = useState(products);
     const [titleFilter, setTitleFilter] = useState('');
@@ -37,9 +40,13 @@ const Products = ({ products = [], categories = [] }) => {
 
         params = params ? params.slice(0, -1) : '';
 
-        handleFilter('https://api.escuelajs.co/api/v1/products', params, setFilteredProducts);
+        handleFilter('https://api.escuelajs.co/api/v1/products/', params, setFilteredProducts);
     };
 
+    console.log(selectCategory)
+    console.log(priceMinFilter)
+    console.log(priceMaxFilter)
+    
     const handleTitleFilter = (title) => {
         setTitleFilter(title);
         applyFilters();
@@ -64,35 +71,39 @@ const Products = ({ products = [], categories = [] }) => {
     
     return(
         <div className='prod'>
-            <h1>Products</h1>
+            <h1 className='prod-title'>Products</h1>
 
-            <TitleFilter onFilter={handleTitleFilter} />
-            <RangePriceFilter onFilter={handlePriceRangeFilter} />
-            <CategoriesFilter categories={categories} onFilter={handleCategoryChange} />
 
             {isAdmin && (
-                <Link to={'admin/products/create'}>Create product</Link>
+                <Link to={'/admin/products/create'}>Create product</Link>
             )}
-
-            <div className='cards'>
-                {filteredProducts.map((prod) =>
-                    <div key={prod.id} className='card' >
-                        <Link to={`/products/${prod.id}`}>
-                            <img src={prod.images} alt="" className='card-img' />
-                            <h3>{prod.title}</h3>
-                            <p>Price: ${prod.price}</p>
-                            <p>Category: {prod.category.name}</p>
-                        </Link>
-                        <button onClick={() => handleAddToCart(prod)}>Add to Cart</button>
-                        {isAdmin && (
-                            <>
-                                <button><Link to={`admin/products/${prod.id}/edit`}>Edit</Link></button>
-                                <DeleteProduct id={prod.id}/>
-                            </>
-                        )}
-                    </div>
-                )}
+            <div className='prod-items'>
+                <div className='prod-cards'>
+                    {filteredProducts.map((prod) =>
+                        <div key={prod.id} className='prod-card' >
+                            <Link to={`/products/${prod.id}`} className='prod-link'>
+                                <img src={prod.images} alt="" className='prod-card-img' />
+                                <h3 className='prod-card-title'>{prod.title}</h3>
+                                <p className='prod-card-info'>Price: ${prod.price}</p>
+                                <p className='prod-card-info'>Category: {prod.category.name}</p>
+                            </Link>
+                            <button className='prod-buttons' onClick={() => handleAddToCart(prod)}>Add to Cart</button>
+                            {isAdmin && (
+                                <>
+                                    <button className='prod-buttons'><Link to={`/admin/products/${prod.id}/edit`}>Edit</Link></button>
+                                    <DeleteProduct id={prod.id}/>
+                                </>
+                            )}
+                        </div>
+                    )}
+                </div>
+                <div className='prod-filters'>
+                    <TitleFilter onFilter={handleTitleFilter} />
+                    <RangePriceFilter onFilter={handlePriceRangeFilter} />
+                    <CategoriesFilter categories={categories} onFilter={handleCategoryChange} />
+                </div>
             </div>
+
         </div>
     )
 }

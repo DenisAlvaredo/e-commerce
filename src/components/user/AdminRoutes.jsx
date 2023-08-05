@@ -1,10 +1,10 @@
 import { Route, Navigate, Outlet } from 'react-router-dom';
 import { useContext } from 'react';
 import { AuthContext } from './AuthContext';
-import CreateCategory from '../categories/Create'
-import EditCategory from '../categories/Edit'
-import CreateProducts from '../products/Create'
-import EditProducts from '../products/Edit'
+import CreateCategory from '../categories/Create';
+import EditCategory from '../categories/Edit';
+import CreateProducts from '../products/Create';
+import EditProducts from '../products/Edit';
 
 const AdminRoutes = () => {
   const { isAdmin } =  useContext(AuthContext);

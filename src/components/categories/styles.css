@@ -4,23 +4,29 @@
     flex-direction: column;
 }
 
-.cards{
+.cat-title{
+    margin-right: 69%;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+.cat-cards{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-.card{
+.cat-card{
     border: solid 1px;
-    margin: 8px;
+    margin: 15px 40px;
 }
 
-.card-img{
+.cat-card-img{
     width: 200px;
     height: 200px;
 }
 
-.card-h3{
+.cat-card-h3{
     text-align: center;
     margin: 10px
 }
