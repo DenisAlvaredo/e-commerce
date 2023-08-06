@@ -32,7 +32,7 @@ const Cart = () => {
     return (
         <>
             <h2 className='cart-title'>Shopping Cart</h2>
-            {purchaseCompleted && <p>¡Compra realizada con éxito!</p>}
+            {purchaseCompleted && <p>¡Successful purchase!</p>}
             {cartItems.length === 0 ? (
                 <p>Your cart is empty</p>
             ) : (
@@ -54,7 +54,7 @@ const Cart = () => {
                     </div>
                     <div className='cart-buy'>
                         <h3>Total: ${calculateTotal()}</h3>
-                        <button onClick={handlePurchase}>Finalizar compra</button>
+                        <button onClick={handlePurchase}>Check out</button>
                     </div>
                 </div>
             )}

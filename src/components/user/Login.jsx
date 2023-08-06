@@ -91,8 +91,7 @@ function Login() {
                 </div>
             ) : (
                 <>
-                    <p>¡Has iniciado sesión con éxito!</p>
-                    <p>Access Token: {accessToken}</p>
+                    <p>¡You have successfully logged in!</p>
                     <button onClick={handleLogout}>Cerrar sesión</button>
                 </>
             )}

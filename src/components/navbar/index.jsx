@@ -4,8 +4,14 @@ import { AuthContext } from '../user/AuthContext';
 import './styles.css'
 
 function NavBar() {
-    const { accessToken } = useContext(AuthContext);
+    const { accessToken, logout } = useContext(AuthContext);
 
+    const handleLogout = () => {
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+
+        logout();
+    };
     return (
         <nav>
             <div>
@@ -14,7 +20,11 @@ function NavBar() {
                     <li className='pull-right'> <Link to={"/cart-detail"} className='link'> Cart </Link></li>
                     <li > <Link to={"/"} className='link'>Categories </Link></li>
                     <li> <Link to={"/products"} className='link'> Products </Link></li>
-                    {accessToken ? ( <li> <Link to={"/"} className='link'> Profile </Link> </li> 
+                    {accessToken ? ( 
+                        <>
+                            <li> <Link to={"/"} className='link'> Profile </Link> </li> 
+                            <li> <button onClick={handleLogout}>Log out</button> </li>
+                        </>
                     ) : ( <li> <Link to={"/login"} className='link'> Login</Link></li> )}
                 </ul>
             </div>
